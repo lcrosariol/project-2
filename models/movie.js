@@ -21,10 +21,8 @@ const movieSchema = new Schema(
       required: true,
     },
     releaseYear: {
-      type: Number,
-      default: function () {
-        return new Date().getFullYear();
-      },
+      type: String,
+      required: true,
     },
     mpaaRating: String,
     cast: [

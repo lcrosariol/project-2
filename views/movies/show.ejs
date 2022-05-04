@@ -35,7 +35,7 @@
   <form id="add-review-form" method="POST" action="/movies/<%= movie._id %>/reviews">
     <label>REMARKS:</label>
     <textarea name="content"></textarea>
-    <label>Rating:</label>
+    <label>COMPLETION LEVEL:</label>
     <select name="rating">
       <option value="1">1</option>
       <option value="2">2</option>
@@ -83,7 +83,7 @@
     </tbody>
   </table>
 <% } else { %>
-  <h5>No Reviews Yet</h5>
+  <h5>No Remarks Yet</h5>
 <% } %>
 
 

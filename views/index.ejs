@@ -1,16 +1,11 @@
-<%- include('./partials/html-head') %>
-<%- include('./partials/nav') %>
-
-<main>
-  <h1>hello, <%= user ? user.profile.name : "friend" %></h1>
-  <% if (user?.profile.avatar) { %>
-    <div>
-      <img
-        src="<%= user.profile.avatar %>"
-        alt="<%= user.profile.name %> avatar"
-      />
-    </div>
-  <% } %>
-</main>
-
-<%- include('./partials/footer') %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= Flight Plan %></h1>
+    <p><%= Flight Plan %></p>
+</body>
+</html>

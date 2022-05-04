@@ -1,0 +1,19 @@
+
+<form id="new-form" action="/movies" method="POST">
+  <label>DEPARTURE:</label>
+  <input type="text" name="title">
+  <label>ARRIVAL:</label>
+  <input type="text" name="releaseYear">
+  <label>VFR/IFR</label>
+  <select name="mpaaRating">
+    <option value="VFR">VFR</option>
+    <option value="MVFR">MVFR</option>
+    <option value="IFR">IFR</option>
+    <option value="CANCELLED DUE TO WEATHER">CANCELLED DUE TO WEATHER</option>
+  </select>
+  <label>DESTINATION HAS FUEL?</label>
+  <input type="checkbox" name="nowShowing" checked>
+  <input type="submit" value="ADD FLIGHT">
+</form>
+
+<%- include('../partials/footer') %>

@@ -1,79 +1,70 @@
-import 'dotenv/config.js'
-import express from 'express'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import createError from 'http-errors'
-import session from 'express-session'
-import logger from 'morgan'
-import methodOverride from 'method-override'
-import passport from 'passport'
+var createError = require("http-errors");
+var express = require("express");
+var path = require("path");
+var cookieParser = require("cookie-parser");
+var logger = require("morgan");
+var session = require("express-session");
+var passport = require("passport");
+require("dotenv").config();
+require("./config/database");
+require("./config/passport");
+var methodOverride = require("method-override");
 
-// connect to MongoDB with mongoose
-import('./config/database.js')
+var indexRouter = require("./routes/index");
+var moviesRouter = require("./routes/movies");
+var reviewsRouter = require("./routes/reviews");
+var performersRouter = require("./routes/performers");
 
-// load passport
-import('./config/passport.js')
-
-// require routes
-import { router as indexRouter } from './routes/index.js'
-import { router as authRouter } from './routes/auth.js'
-
-// create the express app
-const app = express()
+var app = express();
 
 // view engine setup
-app.set(
-  'views',
-  path.join(path.dirname(fileURLToPath(import.meta.url)), 'views')
-)
-app.set('view engine', 'ejs')
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
-// middleware
-app.use(methodOverride('_method'))
-app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(
-  express.static(
-    path.join(path.dirname(fileURLToPath(import.meta.url)), 'public')
-  )
-)
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
 
-// session middleware
+app.use(methodOverride("_method"));
+
+// new code below
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-      sameSite: 'lax',
-    },
+    saveUninitialized: true,
   })
-)
+);
 
-// passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
-// router middleware
-app.use('/', indexRouter)
-app.use('/auth', authRouter)
+app.use(function (req, res, next) {
+  res.locals.user = req.user;
+  next();
+});
+
+app.use("/", indexRouter);
+app.use("/movies", moviesRouter);
+app.use("/", reviewsRouter);
+app.use("/", performersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404))
-})
+  next(createError(404));
+});
 
+// error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message
-  res.locals.error = req.app.get('env') === 'development' ? err : {}
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
-  res.status(err.status || 500)
-  res.render('error', {
-    title: `🎊 ${err.status || 500} Error`,
-  })
-})
+  res.status(err.status || 500);
+  res.render("error");
+});
 
-export { app }
+module.exports = app;
